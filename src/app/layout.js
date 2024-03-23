@@ -6,6 +6,7 @@ import AuthProvider from '@/context/AuthProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ConfigProvider } from 'antd'
 import AntDesignProvider from '@/context/AntdProvider'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 // const inter = Inter({ subsets: ['latin'] })
 
 // export const metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
             </body>
           </html>
         </AuthProvider>
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </AntDesignProvider>
   )

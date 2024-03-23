@@ -87,8 +87,6 @@ const DashboardLayout = ({ children }) => {
   }
   const pathname = usePathname()
 
-  console.log(pathname)
-
   return (
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -121,9 +119,9 @@ const DashboardLayout = ({ children }) => {
         <Sider width={200} style={{ background: colorBgContainer }}>
           <Menu
             mode="inline"
-            defaultSelectedKeys={[pathname]}
+            defaultSelectedKeys={siderMenu.filter((x => pathname.includes(x.href)))}
             style={{ height: '100%', borderRight: 0 }}
-            items={siderMenu}
+            items={me.role === 'teacher' ? siderMenu : siderMenu.slice(0, -1)}
           />
         </Sider>
         <Layout style={{ padding: '24px 24px 24px' }}>

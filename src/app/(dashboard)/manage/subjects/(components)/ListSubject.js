@@ -1,14 +1,15 @@
 import useSubject from '@/data/useSubject'
-import { Col, List, Modal, Row, Skeleton, message } from 'antd'
+import { Col, List, Modal, Row, Skeleton, Space, Table, message } from 'antd'
 import { useState } from 'react'
 import UpdateSubjectModal from './UpdateSubjectModal'
 import { ExclamationCircleFilled } from '@ant-design/icons'
+import useAuth from '@/hook/useAuth'
 
 const ListSubject = () => {
   const { isLoading, data } = useSubject()
   const [editingId, setEditingId] = useState()
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const { me } = useAuth();
   const { deleteSubjectMutation } = useSubject()
 
   const { confirm } = Modal;
@@ -40,7 +41,8 @@ const ListSubject = () => {
             message.success("Xoá môn học thành công");
           },
           onError: (error) => {
-            message.success("Có lỗi trong quá trình xoá môn học", error.response.message);
+
+            message.success("Có lỗi trong quá trình xoá môn học: " + error.response.data);
           }
         });
       },
@@ -50,40 +52,45 @@ const ListSubject = () => {
     });
   };
 
+
+  const columns = [
+    {
+      title: 'Id',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Tên môn học',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Mô tả',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <a key="list-loadmore-edit" onClick={() => showModal(record.id)}>Sửa</a>
+          <a key="list-loadmore-more" onClick={() => showDeleteConfirm(record.id)}>Xoá</a>
+        </Space>
+      ),
+    },
+  ];
+
   return (
-    <Row style={{ width: '100%' }}>
-      <Col xs={24} xl={12}>
-        <List
-          className="demo-loadmore-list"
-          loading={isLoading}
-          itemLayout="horizontal"
-          dataSource={data}
-          renderItem={(item) => (
-            <List.Item
-              actions={[
-                <a key="list-loadmore-edit" onClick={() => showModal(item.id)}>Sửa</a>,
-                <a key="list-loadmore-more" onClick={() => showDeleteConfirm(item.id)}>Xoá</a>
-              ]}
-            >
-              <Skeleton avatar title={false} loading={item.loading} active>
-                <List.Item.Meta
-                  title={<a>{item.name}</a>}
-                  description={item.description}
-                />
-              </Skeleton>
-            </List.Item>
-          )}
-        >
-        </List>
-      </Col>
+    <>
+      <Table columns={me.role === 'teacher' ? columns : columns.slice(0, -1)} dataSource={data} pagination={{ position: ['bottomCenter'] }} />
       <UpdateSubjectModal
         isModalOpen={isModalOpen}
         handleOk={handleOk}
         handleCancel={handleCancel}
         subjectId={editingId}
       />
-      {/* <Pagination defaultCurrent={1} total={50} /> */}
-    </Row>
+    </>
   )
 }
 

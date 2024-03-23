@@ -56,7 +56,6 @@ const useClasses = () => {
 
   const deleteClassMutation = useMutation({
     mutationFn: async (id) => {
-      console.log(id);
       return deleteClass(id)
     },
     onSuccess: async () => {
@@ -76,7 +75,7 @@ const useClasses = () => {
     updateClasses,
     createClassMutation,
     deleteClassMutation,
-    updateClassMutation
+    updateClassMutation,
   }
 }
 

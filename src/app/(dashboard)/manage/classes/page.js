@@ -5,13 +5,14 @@ import Search from 'antd/es/input/Search'
 import useClasses from '@/data/useClasses'
 import CreateClassModal from './(components)/CreateClassModal'
 import { useState } from 'react'
+import useAuth from '@/hook/useAuth'
 
 const { Flex, Typography, Button, Row, Col } = require('antd')
 
 const Classes = () => {
   const onSearch = (value, _e, info) => console.log(info?.source, value)
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const { me } = useAuth();
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -31,15 +32,18 @@ const Classes = () => {
       <Flex vertical>
         <Typography.Title>Danh sách lớp học</Typography.Title>
         <Flex gap={24}>
-          <Button
-            icon={<PlusOutlined />}
-            size='large'
-            type='primary'
-            style={{ fontWeight: 'bold' }}
-            onClick={showModal}
-          >
-            Tạo lớp học mới
-          </Button>
+          {
+            me.role === 'teacher' &&
+            <Button
+              icon={<PlusOutlined />}
+              size='large'
+              type='primary'
+              style={{ fontWeight: 'bold' }}
+              onClick={showModal}
+            >
+              Tạo lớp học mới
+            </Button>
+          }
           <Search
             placeholder="Tìm kiếm lớp học"
             allowClear

@@ -5,11 +5,12 @@ import Search from 'antd/es/input/Search'
 import ListSubject from './(components)/ListSubject'
 import CreateSubjectModal from './(components)/CreateSubjectModal'
 import { useState } from 'react'
+import useAuth from '@/hook/useAuth'
 
 const Subjects = () => {
   const onSearch = (value, _e, info) => console.log(info?.source, value)
   const [isModalOpen, setIsModalOpen] = useState(false)
-
+  const { me } = useAuth();
   const showModal = () => {
     setIsModalOpen(true)
   }
@@ -27,14 +28,17 @@ const Subjects = () => {
       <Flex vertical>
         <Typography.Title>Danh sách môn học</Typography.Title>
         <Flex gap={24}>
-          <Button
-            icon={<PlusOutlined />}
-            size='large' type='primary'
-            style={{ fontWeight: 'bold' }}
-            onClick={showModal}
-          >
-            Tạo môn học mới
-          </Button>
+          {
+            me.role === 'teacher' && <Button
+              icon={<PlusOutlined />}
+              size='large' type='primary'
+              style={{ fontWeight: 'bold' }}
+              onClick={showModal}
+            >
+              Tạo môn học mới
+            </Button>
+          }
+
           <Search
             placeholder="Tìm kiếm lớp học"
             allowClear
@@ -45,9 +49,9 @@ const Subjects = () => {
           />
         </Flex>
       </Flex>
-      <Flex gap={24}>
-        <ListSubject />
-      </Flex>
+
+      <ListSubject />
+
       <CreateSubjectModal
         isModalOpen={isModalOpen}
         handleOk={handleOk}

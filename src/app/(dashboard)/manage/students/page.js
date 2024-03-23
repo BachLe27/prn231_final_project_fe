@@ -3,8 +3,18 @@ import { PlusOutlined } from '@ant-design/icons'
 import { Button, Flex, Typography } from 'antd'
 import Search from 'antd/es/input/Search'
 import React from 'react'
+import StudentTable from './(components)/StudentTable'
+import useAuth from '@/hook/useAuth'
+import { redirect } from 'next/navigation'
 
 const Students = () => {
+
+  const { me } = useAuth();
+
+  if (me.role === 'student') {
+    return redirect('/manage/classes')
+  }
+
   return (
     <Flex vertical gap={32}>
       <Flex vertical>
@@ -19,6 +29,7 @@ const Students = () => {
           />
         </Flex>
       </Flex>
+      <StudentTable />
     </Flex>
   )
 }

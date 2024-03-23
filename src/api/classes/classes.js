@@ -35,3 +35,6 @@ export const deleteClass = (id) => {
     url: `Classes/${id}`,
   })
 }
+
+
+

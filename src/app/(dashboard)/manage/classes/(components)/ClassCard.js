@@ -5,12 +5,15 @@ import { Avatar, Button, Card, Form, Input, Modal, message } from 'antd'
 import Link from 'next/link'
 import { useState } from 'react'
 import UpdateClassModal from './UpdateClassModal'
+import useAuth from '@/hook/useAuth'
 
 const { Meta } = Card
 
 const ClassCard = ({
   item
 }) => {
+
+  const { me } = useAuth();
 
   const { deleteClassMutation } = useClasses()
   const { confirm } = Modal;
@@ -45,7 +48,7 @@ const ClassCard = ({
             message.success("Xoá lớp học thành công");
           },
           onError: (error) => {
-            message.success("Có lỗi trong quá trình xoá lớp học", error.response.message);
+            message.success("Có lỗi trong quá trình xoá lớp học: " + error.response.data);
           }
         });
       },
@@ -64,10 +67,10 @@ const ClassCard = ({
         cover={
           <img
             alt="example"
-            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+            src="https://assets.leetcode.com/contest/weekly-contest-374/card_img_1700975397.png"
           />
         }
-        actions={[
+        actions={me.role === 'teacher' && [
           <EditOutlined key="edit" onClick={showModal} />,
           <DeleteOutlined key="delete" onClick={() => { showDeleteConfirm(item.id) }} />
         ]}
